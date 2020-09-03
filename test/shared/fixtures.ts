@@ -2,7 +2,7 @@ import { Wallet } from 'ethers';
 import { Web3Provider } from 'ethers/providers';
 import { MintableErc20 } from '../../typechain/MintableErc20';
 import { MintableErc20Factory } from '../../typechain/MintableErc20Factory';
-
+import { ContractDetails } from './ContractDetails';
 export interface MintableFixture {
   mintable: MintableErc20;
 }
@@ -13,15 +13,13 @@ const overrides = {
 };
 
 export async function mintableFixture(provider: Web3Provider, [wallet]: Wallet[]): Promise<MintableFixture> {
-  const CONTRACT_DECIMALS = process.env.CONTRACT_DECIMALS as string;
-  const CONTRACT_NAME = process.env.CONTRACT_NAME as string;
-  const CONTRACT_SYMBOL = process.env.CONTRACT_SYMBOL as string;
-  const CONTRACT_TOTAL_SUPPLY = process.env.CONTRACT_TOTAL_SUPPLY as string;
+  const contractDetails = new ContractDetails();
   const mintable = await new MintableErc20Factory(wallet).deploy(
-    CONTRACT_NAME,
-    CONTRACT_SYMBOL,
-    CONTRACT_TOTAL_SUPPLY,
-    CONTRACT_DECIMALS,
+    contractDetails.name,
+    contractDetails.symbol,
+    contractDetails.totalSupply,
+    contractDetails.decimals,
+    contractDetails.maxMintedAmount,
     overrides,
   );
   return { mintable };

@@ -30,6 +30,10 @@ const config: BuidlerConfig = {
       url: `https://ropsten.infura.io/v3/${process.env.INFURA_API_KEY}`,
       accounts: [secret],
     },
+    main: {
+      url: `https://infura.io/v3/${process.env.INFURA_API_KEY}`,
+      accounts: [secret],
+    },
     coverage: {
       url: 'http://127.0.0.1:8555', // Coverage launches its own ganache-cli client
     },

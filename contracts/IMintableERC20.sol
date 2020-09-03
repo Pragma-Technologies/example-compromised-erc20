@@ -18,4 +18,6 @@ interface IMintableERC20 is IERC20 {
     function removeMaintainer(address maintainer) external;
     
     function maintainers() external view returns (address[] memory);
+
+    function maxMintedAmount() external view returns (uint256);
 }
