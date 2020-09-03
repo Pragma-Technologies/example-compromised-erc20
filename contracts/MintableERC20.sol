@@ -11,44 +11,39 @@ import "./IMintableERC20.sol";
 contract MintableERC20 is ERC20, Ownable {
 
     using SafeMath for uint256;
-    
+
     event MaintainerAdded(address maintainer);
     event MaintainerRemoved(address maintainer);
 
     address[] private _maintainers;
-    uint256 private immutable _maxMintedAmount;
+    uint256 private immutable _maxMintedSupply;
 
     constructor (
         string memory name, 
         string memory symbol, 
         uint256 totalSupply,
         uint8 decimals,
-        uint256 maxMintedAmount
+        uint256 maxMintedSupply
     ) public ERC20(name, symbol) {
         _setupDecimals(decimals);
         _mint(msg.sender, totalSupply);
-        _maxMintedAmount = maxMintedAmount;
+        require(totalSupply <= maxMintedSupply, "MintableERC20: totalSupply must be less of equal to maxMintedSupply");
+        _maxMintedSupply = maxMintedSupply;
     }
 
     function mintAmount(address[] calldata accounts, uint256 amount) external onlyMaintainers {
-        uint256 maxMintedAmount = _maxMintedAmount;
-        uint256 total;
         for (uint i = 0; i < accounts.length; ++i) {
             _mint(accounts[i], amount);
-            total = total.add(amount);
         }
-        require(total <= maxMintedAmount, "MintableERC20: total amount exceeds maximum minted amount");
+        require(totalSupply() <= _maxMintedSupply, "MintableERC20: total amount exceeds maximum minted amount");
     }
 
     function mintAmounts(address[] calldata accounts, uint256[] calldata amounts) external onlyMaintainers {
         require(accounts.length == amounts.length, "MintableERC20: invalid length");
-        uint256 maxMintedAmount = _maxMintedAmount;
-        uint256 total;
         for (uint i = 0; i < accounts.length; ++i) {
             _mint(accounts[i], amounts[i]);
-            total = total.add(amounts[i]);
         }
-        require(total <= maxMintedAmount, "MintableERC20: total amount exceeds maximum minted amount");
+        require(totalSupply() <= _maxMintedSupply, "MintableERC20: total amount exceeds maximum minted amount");
     }
 
     function addMaintainer(address maintainer) external onlyOwner {
@@ -75,8 +70,8 @@ contract MintableERC20 is ERC20, Ownable {
         return _maintainers;
     }
 
-    function maxMintedAmount() external view returns (uint256) {
-        return _maxMintedAmount;
+    function maxMintedSupply() external view returns (uint256) {
+        return _maxMintedSupply;
     }
 
     function _isMaintainer(address maintaner) private view returns (bool) {

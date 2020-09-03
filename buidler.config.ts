@@ -16,7 +16,7 @@ const config: BuidlerConfig = {
     version: '0.6.8',
     optimizer: {
       enabled: true,
-      runs: 999999,
+      runs: 200,
     },
   },
   networks: {

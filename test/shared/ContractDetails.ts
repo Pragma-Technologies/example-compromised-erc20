@@ -4,8 +4,9 @@ export class ContractDetails {
   public name: string;
   public symbol: string;
   public totalSupply: BigNumber;
-  public maxMintedAmount: BigNumber;
+  public maxMintedSupply: BigNumber;
   public decimals: number;
+  public mintedAmount: BigNumber;
 
   constructor() {
     const name = process.env.CONTRACT_NAME;
@@ -24,14 +25,15 @@ export class ContractDetails {
     if (!decimals) {
       throw new Error('Unset CONTRACT_DECIMALS');
     }
-    const maxMintedAmount = process.env.CONTRACT_MAX_MINTED_AMOUNT_IN_WEI;
-    if (!maxMintedAmount) {
+    const maxMintedSupply = process.env.CONTRACT_MAX_MINTED_AMOUNT_IN_WEI;
+    if (!maxMintedSupply) {
       throw new Error('Unset CONTRACT_MAX_MINTED_AMOUNT');
     }
     this.name = name;
     this.symbol = symbol;
     this.decimals = Number.parseInt(decimals);
-    this.maxMintedAmount = new BigNumber(maxMintedAmount);
+    this.maxMintedSupply = new BigNumber(maxMintedSupply);
     this.totalSupply = new BigNumber(totalSupply);
+    this.mintedAmount = new BigNumber(this.maxMintedSupply).sub(new BigNumber(this.totalSupply));
   }
 }

@@ -39,8 +39,8 @@ describe('MintableERC20', () => {
     expect(await mintable.decimals()).to.be.eq(CONTRACT_DETAILS.decimals);
   });
 
-  it('maxMintedAmount', async () => {
-    expect(await mintable.maxMintedAmount()).to.be.eq(CONTRACT_DETAILS.maxMintedAmount);
+  it('maxMintedSupply', async () => {
+    expect(await mintable.maxMintedSupply()).to.be.eq(CONTRACT_DETAILS.maxMintedSupply);
   });
 
   it('name', async () => {
@@ -53,21 +53,21 @@ describe('MintableERC20', () => {
 
   it('mintAmount, mintAmounts: non-maintainer cant mint', async () => {
     await expect(
-      mintable.connect(other).mintAmount([TEST_ADDRESSES[0]], CONTRACT_DETAILS.maxMintedAmount),
+      mintable.connect(other).mintAmount([TEST_ADDRESSES[0]], CONTRACT_DETAILS.maxMintedSupply),
     ).to.be.revertedWith(PERMISSION_DENIED);
     await expect(
-      mintable.connect(other).mintAmounts([TEST_ADDRESSES[0]], [CONTRACT_DETAILS.maxMintedAmount]),
+      mintable.connect(other).mintAmounts([TEST_ADDRESSES[0]], [CONTRACT_DETAILS.maxMintedSupply]),
     ).to.be.revertedWith(PERMISSION_DENIED);
   });
 
   it('mintAmount: owner can mint', async () => {
     const recipient = TEST_ADDRESSES[0];
-    const amount: BigNumberish = CONTRACT_DETAILS.maxMintedAmount;
+    const amount: BigNumberish = CONTRACT_DETAILS.mintedAmount;
     const initialTotalSupply = await mintable.totalSupply();
     const initialBalance = await mintable.balanceOf(recipient);
 
     await mintable.mintAmount([recipient], amount);
-    await expect(mintable.mintAmount([recipient], CONTRACT_DETAILS.maxMintedAmount.add(1))).to.be.revertedWith(
+    await expect(mintable.mintAmount([recipient], CONTRACT_DETAILS.mintedAmount.add(1))).to.be.revertedWith(
       EXCEEDS_MAX_MINTED_AMOUNT,
     );
 
@@ -77,14 +77,14 @@ describe('MintableERC20', () => {
 
   it('mintAmount: maintainer can mint', async () => {
     const recipient = TEST_ADDRESSES[0];
-    const amount: BigNumberish = CONTRACT_DETAILS.maxMintedAmount;
+    const amount: BigNumberish = CONTRACT_DETAILS.mintedAmount;
     const initialTotalSupply = await mintable.totalSupply();
     const initialBalance = await mintable.balanceOf(recipient);
 
     await mintable.addMaintainer(other.address);
     await mintable.connect(other).mintAmount([recipient], amount);
     await expect(
-      mintable.connect(other).mintAmount([recipient], CONTRACT_DETAILS.maxMintedAmount.add(1)),
+      mintable.connect(other).mintAmount([recipient], CONTRACT_DETAILS.mintedAmount.add(1)),
     ).to.be.revertedWith(EXCEEDS_MAX_MINTED_AMOUNT);
 
     expect(await mintable.totalSupply()).to.be.eq(initialTotalSupply.add(amount));
@@ -93,7 +93,7 @@ describe('MintableERC20', () => {
 
   it('mintAmounts: owner can mint', async () => {
     const recipients = TEST_ADDRESSES;
-    const amounts: BigNumber[] = recipients.map(() => CONTRACT_DETAILS.maxMintedAmount.div(recipients.length));
+    const amounts: BigNumber[] = recipients.map(() => CONTRACT_DETAILS.mintedAmount.div(recipients.length));
     const totalAmounts = amounts.reduce((acc, v) => acc.add(v), new BigNumber(0));
     const initialBalances: BigNumber[] = await Promise.all(recipients.map(a => mintable.balanceOf(a)));
     const initialTotalSupply = await mintable.totalSupply();
@@ -102,7 +102,7 @@ describe('MintableERC20', () => {
     await expect(
       mintable.mintAmounts(
         recipients,
-        recipients.map(() => CONTRACT_DETAILS.maxMintedAmount),
+        recipients.map(() => CONTRACT_DETAILS.mintedAmount),
       ),
     ).to.be.revertedWith(EXCEEDS_MAX_MINTED_AMOUNT);
 
@@ -116,7 +116,7 @@ describe('MintableERC20', () => {
 
   it('mintAmounts: maintainer can mint', async () => {
     const recipients = TEST_ADDRESSES;
-    const amounts: BigNumber[] = recipients.map(() => CONTRACT_DETAILS.maxMintedAmount.div(recipients.length));
+    const amounts: BigNumber[] = recipients.map(() => CONTRACT_DETAILS.mintedAmount.div(recipients.length));
     const totalAmounts = amounts.reduce((acc, v) => acc.add(v), new BigNumber(0));
     const initialBalances: BigNumber[] = await Promise.all(recipients.map(a => mintable.balanceOf(a)));
     const initialTotalSupply = await mintable.totalSupply();
@@ -126,7 +126,7 @@ describe('MintableERC20', () => {
     await expect(
       mintable.connect(other).mintAmounts(
         recipients,
-        recipients.map(() => CONTRACT_DETAILS.maxMintedAmount),
+        recipients.map(() => CONTRACT_DETAILS.mintedAmount),
       ),
     ).to.be.revertedWith(EXCEEDS_MAX_MINTED_AMOUNT);
 

@@ -10,7 +10,7 @@ async function main() {
     contractDetails.symbol,
     contractDetails.totalSupply,
     contractDetails.decimals,
-    contractDetails.maxMintedAmount,
+    contractDetails.maxMintedSupply,
   );
   console.log('Deployed MintableERC20 contract to:', mintable.address);
 }

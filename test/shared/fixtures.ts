@@ -19,7 +19,7 @@ export async function mintableFixture(provider: Web3Provider, [wallet]: Wallet[]
     contractDetails.symbol,
     contractDetails.totalSupply,
     contractDetails.decimals,
-    contractDetails.maxMintedAmount,
+    contractDetails.maxMintedSupply,
     overrides,
   );
   return { mintable };
