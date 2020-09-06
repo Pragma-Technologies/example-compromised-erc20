@@ -11,7 +11,7 @@
     "coverage": "npm run build && npx buidler coverage --temp artifacts --network coverage",
     "rebuild": "npm run clean && npm run build && npm run test",
     "lint": "eslint ./ --fix",
-    "lint-quick": "pretty-quick --staged --pattern \"**/*.*(ts|tsx)\"",
+    "lint-quick": "pretty-quick --staged --pattern \"**/*.*(ts|tsx)\""
   },
   "husky": {
     "hooks": {
