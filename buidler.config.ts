@@ -30,8 +30,8 @@ const config: BuidlerConfig = {
       url: `https://ropsten.infura.io/v3/${process.env.INFURA_API_KEY}`,
       accounts: [secret],
     },
-    main: {
-      url: `https://infura.io/v3/${process.env.INFURA_API_KEY}`,
+    mainnet: {
+      url: `https://mainnet.infura.io/v3/${process.env.INFURA_API_KEY}`,
       accounts: [secret],
     },
     coverage: {

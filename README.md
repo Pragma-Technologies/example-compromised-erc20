@@ -12,7 +12,9 @@ CONTRACT_DECIMALS={YOUR_CONTRACT_DECIMALS}
 CONTRACT_MAX_MINTED_AMOUNT_IN_WEI={YOUR_CONTRACT_MAX_MINTED_AMOUNT_IN_WEI}
 ```
 4. Run `npm run rebuild` in project root directory
-5. Deploy contract `npx buidler run --network <your-network> scripts/deploy.ts`
+5. Deploy contract example `NAME=Hello SYMBOL=WORLD DECIMALS=18 TOTAL_SUPPLY=10000000000 npx buidler run --network ropsten scripts/deploy_custom.ts`
+6. Mint amount example `CONTRACT=0x3653aC9A46482Fb00B87B5002b7Be20706F83E26 ACCOUNTS=0x7754E650CC1D8b4cA4cBD49526b2A01953481a1A,0xa42aCE1C87De02eD1e4B4Cf53A3b4d5e0Fbb0667 AMOUNT=0.3333 npx buidler run --network ropsten scripts/mint_amount.ts`
+7. Mint amounts example `CONTRACT=0x3653aC9A46482Fb00B87B5002b7Be20706F83E26 ACCOUNTS=0x7754E650CC1D8b4cA4cBD49526b2A01953481a1A,0xa42aCE1C87De02eD1e4B4Cf53A3b4d5e0Fbb0667 AMOUNTS=0.3333,0.1 npx buidler run --network ropsten scripts/mint_amounts.ts`
 
 #  Boilerplate
 
